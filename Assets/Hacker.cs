@@ -23,8 +23,25 @@ public class Hacker : MonoBehaviour
         Terminal.WriteLine("Enter your selection: ");
     }
 
+    // Handle user input
     void OnUserInput(string input)
     {
-        print(input);
+        if(input == "menu")
+        {
+            ShowMainMenu("Taidai");
+        } else if(input == "1")
+        {
+            print("1");
+        } else if(input == "2")
+        {
+            print("2");
+        }
+        else if(input == "3")
+        {
+            print("3");
+        } else
+        {
+            Terminal.WriteLine("Invalid input!");
+        }
     }
 }
