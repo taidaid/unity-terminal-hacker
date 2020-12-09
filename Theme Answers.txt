@@ -1,0 +1,3 @@
+Easy (local zoo): goat, eagle, truck, horns, stable
+Medium (news station): headline, broadcast, anchorage, television, satellite
+Hard (National Security Agency): confidential, priveleged, espionage, geopolitical, authentication
