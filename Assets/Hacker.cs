@@ -10,9 +10,17 @@ public class Hacker : MonoBehaviour
     enum Screen { MainMenu, Password, Win };
     Screen currentScreen;
 
-    private string[] level1Passwords = new string[] { "goat", "eagle", "truck", "horns", "stable" };
-    private string[] level2Passwords = new string[] { "headline", "broadcast", "anchorage", "television", "satellite"};
-    private string[] level3Passwords = new string[] { "confidential", "priveleged", "espionage", "geopolitical", "authentication" };
+   
+    string[] level1Passwords = new string[5] { "goat", "eagle", "truck", "horns", "stable" };
+    string[] level2Passwords = new string[5] { "headline", "broadcast", "anchorage", "television", "satellite"};
+    string[] level3Passwords = new string[5] { "confidential", "priveleged", "espionage", "geopolitical", "authentication" };
+    string[][] passwords;
+    int passwordIndex;
+
+    Hacker()
+    {
+        passwords = new string[][] { level1Passwords, level2Passwords, level3Passwords };
+    }
 
     private string incorrectPasswordMessage = " ** Incorrect Password **";
     private string winMessage = "You win!";
@@ -57,19 +65,10 @@ public class Hacker : MonoBehaviour
 
     private void RunMainMenu(string input)
     {
-        if (input == "1")
+        bool isValidLevel = (input == "1" || input == "2" || input == "3");
+        if (isValidLevel)
         {
-            level = 1;
-            StartGame();
-        }
-        else if (input == "2")
-        {
-            level = 2;
-            StartGame();
-        }
-        else if (input == "3")
-        {
-            level = 3;
+            level = int.Parse(input);
             StartGame();
         }
         else
@@ -88,6 +87,8 @@ public class Hacker : MonoBehaviour
     void StartGame()
     {
         currentScreen = Screen.Password;
+        passwordIndex = UnityEngine.Random.Range(0, passwords[level].Length);
+        Terminal.ClearScreen();
         Terminal.WriteLine("Please enter your password");
     }
 
@@ -95,7 +96,7 @@ public class Hacker : MonoBehaviour
     {
         if(level == 1)
         {
-            if(Array.Exists(level1Passwords, el => el == input))
+            if(input == passwords[0][passwordIndex])
             {
                 RunWinScreen();
             }
@@ -106,7 +107,7 @@ public class Hacker : MonoBehaviour
         }
         else if(level == 2)
         {
-            if(Array.Exists(level2Passwords, el => el == input))
+            if(input == passwords[1][passwordIndex])
             {
                 RunWinScreen();
             }
@@ -117,7 +118,7 @@ public class Hacker : MonoBehaviour
         }
         else if(level == 3)
         {
-            if(Array.Exists(level3Passwords, el => el == input))
+            if(input == passwords[2][passwordIndex])
             {
                 RunWinScreen();
             }
