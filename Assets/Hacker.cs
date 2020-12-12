@@ -15,7 +15,7 @@ public class Hacker : MonoBehaviour
     string[] level2Passwords = new string[5] { "headline", "broadcast", "anchorage", "television", "satellite"};
     string[] level3Passwords = new string[5] { "confidential", "priveleged", "espionage", "geopolitical", "authentication" };
     string[][] passwords;
-    int passwordIndex;
+    string password;
 
     Hacker()
     {
@@ -38,6 +38,7 @@ public class Hacker : MonoBehaviour
         print("ShowMainMenu method executes");
         currentScreen = Screen.MainMenu;
         Terminal.ClearScreen();
+        password = null;
         Terminal.WriteLine("Welcome " + userName + ", choose your victim\n");
         Terminal.WriteLine("Press 1 for Hardberry Farm");
         Terminal.WriteLine("Press 2 for KHNW News");
@@ -69,7 +70,7 @@ public class Hacker : MonoBehaviour
         if (isValidLevel)
         {
             level = int.Parse(input);
-            StartGame();
+            AskForPassword();
         }
         else
         {
@@ -77,55 +78,42 @@ public class Hacker : MonoBehaviour
         }
     }
 
-    private void RunWinScreen()
+    void RunWinScreen()
     {
         currentScreen = Screen.Win;
+        password = null;
         Terminal.ClearScreen();
         Terminal.WriteLine(winMessage);
     }
 
-    void StartGame()
+    void AskForPassword()
     {
         currentScreen = Screen.Password;
-        passwordIndex = UnityEngine.Random.Range(0, passwords[level].Length);
         Terminal.ClearScreen();
-        Terminal.WriteLine("Please enter your password");
+        if(password == null)
+        {
+            SetRandomPassword();
+        }
+        Terminal.WriteLine("Enter your password, hint: " + password.Anagram());
+    }
+
+    void SetRandomPassword()
+    { 
+        int passwordIndex = UnityEngine.Random.Range(0, passwords[level - 1].Length);
+        password = passwords[level - 1][passwordIndex];
     }
 
     void CheckPassword(string input)
     {
-        if(level == 1)
+        if (input == password)
         {
-            if(input == passwords[0][passwordIndex])
-            {
-                RunWinScreen();
-            }
-            else
-            {
-                Terminal.WriteLine(incorrectPasswordMessage);
-            }
+            RunWinScreen();
         }
-        else if(level == 2)
+        else
         {
-            if(input == passwords[1][passwordIndex])
-            {
-                RunWinScreen();
-            }
-            else
-            {
-                Terminal.WriteLine(incorrectPasswordMessage);
-            }
-        }
-        else if(level == 3)
-        {
-            if(input == passwords[2][passwordIndex])
-            {
-                RunWinScreen();
-            }
-            else
-            {
-                Terminal.WriteLine(incorrectPasswordMessage);
-            }
+            Terminal.WriteLine(incorrectPasswordMessage);
+            Terminal.WriteLine("You may type 'menu' at any time.");
+            AskForPassword();
         }
     }
 }
